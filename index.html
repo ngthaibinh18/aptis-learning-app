@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aptis Path - Tự học Tiếng Anh A1 - C1</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    .perspective-1000 { perspective: 1000px; }
+    .transform-style-3d { transform-style: preserve-3d; }
+    .backface-hidden { backface-visibility: hidden; }
+    .rotate-y-180 { transform: rotateY(180deg); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="bg-indigo-600 text-white shadow-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <i data-lucide="graduation-cap" class="w-8 h-8 text-amber-300"></i>
+        <div>
+          <h1 class="text-xl font-bold tracking-tight">Aptis Journey</h1>
+          <p class="text-xs text-indigo-200">Lộ trình mất gốc A1 &rarr; C1</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-4">
+        <div class="bg-indigo-700/60 px-3 py-1.5 rounded-lg border border-indigo-500/30 flex items-center space-x-2">
+          <i data-lucide="award" class="w-5 h-5 text-amber-400"></i>
+          <span class="text-xs font-medium">Cấp độ hiện tại: <strong id="user-current-level" class="text-amber-300 text-sm">A1</strong></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-6xl mx-auto px-4 py-6 flex-1 w-full grid grid-cols-1 md:grid-cols-12 gap-6">
+    
+    <!-- Sidebar / Lesson Navigation -->
+    <aside class="md:col-span-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col h-fit">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+        <h2 class="text-base font-semibold text-slate-800 flex items-center">
+          <i data-lucide="book-open" class="w-4 h-4 mr-2 text-indigo-600"></i>
+          Danh sách bài học A1
+        </h2>
+        <span class="text-xs px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 font-semibold" id="lesson-counter">Bài 1/2</span>
+      </div>
+
+      <div class="space-y-2" id="lessons-list">
+        <!-- Lessons rendered via JS -->
+      </div>
+
+      <!-- Aptis Exit Test Card -->
+      <div class="mt-6 pt-4 border-t border-slate-100">
+        <button id="btn-open-exit-exam" class="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-medium py-3 px-4 rounded-xl shadow-md shadow-orange-100 flex items-center justify-between transition-all">
+          <div class="flex items-center space-x-2">
+            <i data-lucide="shield-alert" class="w-5 h-5 text-amber-100"></i>
+            <span class="text-sm font-bold text-left">Aptis A1 Exit Exam<br><span class="text-xs font-normal text-amber-100">Thi qua môn 4 kỹ năng (0-50đ)</span></span>
+          </div>
+          <i data-lucide="chevron-right" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Content Workspace -->
+    <section class="md:col-span-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 min-h-[550px] flex flex-col">
+      <!-- Tab Navigation -->
+      <div class="flex border-b border-slate-200 mb-6 space-x-2 text-sm font-medium">
+        <button onclick="switchTab('learn')" id="tab-learn" class="tab-btn px-4 py-2 border-b-2 border-indigo-600 text-indigo-600 flex items-center space-x-2">
+          <i data-lucide="book" class="w-4 h-4"></i>
+          <span>Lý thuyết & Nghe</span>
+        </button>
+        <button onclick="switchTab('flashcard')" id="tab-flashcard" class="tab-btn px-4 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center space-x-2">
+          <i data-lucide="layers" class="w-4 h-4"></i>
+          <span>Flashcard Từ Vựng</span>
+        </button>
+        <button onclick="switchTab('quiz')" id="tab-quiz" class="tab-btn px-4 py-2 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center space-x-2">
+          <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+          <span>Trắc nghiệm củng cố</span>
+        </button>
+      </div>
+
+      <!-- Tab 1: Learn & Audio -->
+      <div id="content-learn" class="tab-content flex-1 space-y-6">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md" id="lesson-badge">Unit 1</span>
+          <h2 class="text-2xl font-bold text-slate-900 mt-2" id="lesson-title">Personal Information & Greetings</h2>
+        </div>
+
+        <!-- Google Drive Audio Player Card -->
+        <div class="bg-indigo-50/70 p-4 rounded-xl border border-indigo-100 flex flex-col sm:flex-row items-center gap-4">
+          <div class="p-3 bg-indigo-600 text-white rounded-xl shadow-sm">
+            <i data-lucide="headphones" class="w-6 h-6"></i>
+          </div>
+          <div class="flex-1 w-full">
+            <p class="text-sm font-semibold text-slate-800 mb-1" id="audio-title">File nghe Audio từ Google Drive</p>
+            <audio id="audio-player" controls class="w-full h-9 rounded"></audio>
+            <p class="text-xs text-slate-500 mt-1 flex items-center">
+              <i data-lucide="info" class="w-3.5 h-3.5 mr-1 text-indigo-500"></i>
+              Nếu audio tải chậm, hãy đảm bảo link Google Drive đã bật chế độ Public.
+            </p>
+          </div>
+        </div>
+
+        <!-- Theory Section -->
+        <div class="bg-slate-50 p-5 rounded-xl border border-slate-100 space-y-3">
+          <h3 class="font-bold text-slate-800 flex items-center text-sm uppercase tracking-wide">
+            <i data-lucide="sparkles" class="w-4 h-4 mr-2 text-indigo-600"></i>
+            Ngữ pháp trọng tâm
+          </h3>
+          <div class="text-sm text-slate-700 leading-relaxed space-y-2" id="lesson-grammar">
+            <!-- Render Grammar -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: Flashcards -->
+      <div id="content-flashcard" class="tab-content hidden flex-1 flex flex-col items-center justify-center p-4">
+        <p class="text-xs text-slate-400 mb-3">Nhấp vào thẻ để lật xem nghĩa & phiên âm IPA</p>
+        <div class="w-full max-w-sm h-64 perspective-1000 cursor-pointer" onclick="flipCard()">
+          <div id="flashcard-inner" class="w-full h-full relative transform-style-3d transition-transform duration-500 rounded-2xl shadow-lg border border-indigo-100">
+            <!-- Front -->
+            <div class="absolute inset-0 backface-hidden bg-white rounded-2xl flex flex-col items-center justify-center p-6 border-2 border-indigo-200">
+              <span class="text-xs font-semibold uppercase text-indigo-500 mb-2">Từ vựng</span>
+              <h3 class="text-3xl font-extrabold text-slate-800" id="card-front-word">Occupation</h3>
+              <p class="text-sm text-slate-400 mt-2" id="card-front-ipa">/ˌɑːkjuˈpeɪʃn/</p>
+            </div>
+            <!-- Back -->
+            <div class="absolute inset-0 backface-hidden bg-gradient-to-br from-indigo-600 to-indigo-800 text-white rounded-2xl flex flex-col items-center justify-center p-6 rotate-y-180">
+              <span class="text-xs font-semibold uppercase text-indigo-200 mb-2">Định nghĩa & Ví dụ</span>
+              <h3 class="text-2xl font-bold" id="card-back-meaning">Nghề nghiệp</h3>
+              <p class="text-xs text-indigo-100 mt-3 text-center italic" id="card-back-example">"Please state your name and occupation."</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="flex items-center space-x-4 mt-6">
+          <button onclick="prevCard()" class="p-2.5 rounded-full border border-slate-200 hover:bg-slate-100 text-slate-700">
+            <i data-lucide="arrow-left" class="w-5 h-5"></i>
+          </button>
+          <span class="text-sm font-semibold text-slate-600" id="card-counter">1 / 3</span>
+          <button onclick="nextCard()" class="p-2.5 rounded-full border border-slate-200 hover:bg-slate-100 text-slate-700">
+            <i data-lucide="arrow-right" class="w-5 h-5"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab 3: Daily Quiz -->
+      <div id="content-quiz" class="tab-content hidden flex-1 space-y-6">
+        <div class="border-b pb-3">
+          <h3 class="text-lg font-bold text-slate-800">Luyện tập trắc nghiệm bài học</h3>
+          <p class="text-xs text-slate-500">Hoàn thành bài tập để củng cố kiến thức trước khi làm bài Aptis Exit Test.</p>
+        </div>
+        <div id="quiz-container" class="space-y-4">
+          <!-- Quiz items injected here -->
+        </div>
+        <button onclick="submitDailyQuiz()" class="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition shadow">
+          Nộp bài và chấm điểm
+        </button>
+        <div id="quiz-result" class="hidden p-4 rounded-xl border"></div>
+      </div>
+
+      <!-- Exit Exam View (Modal / Full Overlay) -->
+      <div id="content-exam" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl space-y-6">
+          <div class="flex items-center justify-between border-b pb-4">
+            <div>
+              <span class="text-xs font-bold uppercase text-amber-600 bg-amber-50 px-2.5 py-1 rounded-md">Kiểm tra chuẩn hoá</span>
+              <h2 class="text-xl font-bold text-slate-900 mt-1">Aptis ESOL Exit Exam - Level A1</h2>
+              <p class="text-xs text-slate-500">Mỗi kỹ năng được chấm trên thang điểm 0 - 50. Đạt tối thiểu 20/50 ở cả 4 kỹ năng để mở khoá Level A2.</p>
+            </div>
+            <button onclick="closeExamModal()" class="text-slate-400 hover:text-slate-600 p-2">
+              <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+          </div>
+
+          <div class="space-y-6">
+            <!-- Listening (0-50) -->
+            <div class="border border-slate-200 p-4 rounded-xl">
+              <div class="flex items-center justify-between mb-3">
+                <h4 class="font-bold text-indigo-700 flex items-center">
+                  <i data-lucide="headphones" class="w-4 h-4 mr-2"></i>
+                  1. Listening Skill (Thang điểm 0 - 50)
+                </h4>
+              </div>
+              <p class="text-xs text-slate-600 mb-2">Nghe đoạn băng mẫu sau và trả lời câu hỏi:</p>
+              <audio controls class="w-full h-8 mb-3" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
+              <div class="space-y-2 text-sm" id="exam-listening-questions">
+                <p class="font-medium text-slate-800">Câu 1: What is the speaker's main purpose?</p>
+                <div class="space-y-1">
+                  <label class="flex items-center space-x-2 text-xs">
+                    <input type="radio" name="exam_l1" value="0" class="text-indigo-600">
+                    <span>Introducing a new colleague</span>
+                  </label>
+                  <label class="flex items-center space-x-2 text-xs">
+                    <input type="radio" name="exam_l1" value="1" class="text-indigo-600">
+                    <span>Booking a hotel room</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Reading (0-50) -->
+            <div class="border border-slate-200 p-4 rounded-xl">
+              <h4 class="font-bold text-emerald-700 flex items-center mb-2">
+                <i data-lucide="book-open-check" class="w-4 h-4 mr-2"></i>
+                2. Reading Skill (Thang điểm 0 - 50)
+              </h4>
+              <p class="text-xs text-slate-600 italic bg-slate-50 p-3 rounded mb-2 leading-relaxed">
+                "Hello, my name is David. I am 24 years old and I work as an accountant at a bank in London. On weekends, I enjoy playing football with my brother."
+              </p>
+              <p class="text-sm font-medium text-slate-800 mb-2">What does David do at weekends?</p>
+              <div class="space-y-1 text-xs">
+                <label class="flex items-center space-x-2">
+                  <input type="radio" name="exam_r1" value="1" class="text-indigo-600">
+                  <span>Plays football with his brother</span>
+                </label>
+                <label class="flex items-center space-x-2">
+                  <input type="radio" name="exam_r1" value="0" class="text-indigo-600">
+                  <span>Works at the London bank</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Writing (0-50) -->
+            <div class="border border-slate-200 p-4 rounded-xl">
+              <h4 class="font-bold text-purple-700 flex items-center mb-2">
+                <i data-lucide="pencil" class="w-4 h-4 mr-2"></i>
+                3. Writing Skill (Thang điểm 0 - 50)
+              </h4>
+              <p class="text-xs text-slate-600 mb-2">Write a short note (20-30 words) introducing yourself (Name, age, nationality, job).</p>
+              <textarea id="exam-writing-input" class="w-full text-xs p-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-purple-400 outline-none" rows="3" placeholder="Nhập câu trả lời bằng tiếng Anh của bạn..."></textarea>
+            </div>
+
+            <!-- Speaking (0-50) -->
+            <div class="border border-slate-200 p-4 rounded-xl">
+              <h4 class="font-bold text-rose-700 flex items-center mb-2">
+                <i data-lucide="mic" class="w-4 h-4 mr-2"></i>
+                4. Speaking Skill (Thang điểm 0 - 50)
+              </h4>
+              <p class="text-xs text-slate-600 mb-2">Describe what you do everyday in simple sentences (Aptis Part 1 Format).</p>
+              <div class="flex items-center space-x-3">
+                <button type="button" onclick="recordSpeechMock()" id="btn-mock-record" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-semibold flex items-center space-x-1">
+                  <i data-lucide="mic" class="w-4 h-4"></i>
+                  <span>Ghi âm giọng nói (30s)</span>
+                </button>
+                <span id="speaking-status" class="text-xs text-slate-500">Chưa ghi âm</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Exam Action Button -->
+          <div class="pt-4 border-t flex items-center justify-between">
+            <span class="text-xs text-slate-500">Hệ thống sẽ tổng hợp thang điểm Aptis 4 kỹ năng.</span>
+            <button onclick="evaluateAptisExam()" class="px-6 py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl shadow transition">
+              Chấm thi & Kết quả
+            </button>
+          </div>
+
+          <!-- Exam Result Modal Alert -->
+          <div id="exam-score-box" class="hidden p-4 rounded-xl border mt-4"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Script logic -->
+  <script>
+    // --- 1. DỮ LIỆU BÀI HỌC (Có thể mở rộng thêm A2, B1, B2, C1) ---
+    // Link audio mẫu: Thay FILE_ID từ link Drive của bạn:
+    // Dạng Drive ID: 1gNjwCUC7Uoe5SDrYj8QLswiXboY8c0Hr
+    // Link trực tiếp: https://drive.google.com/uc?export=download&id=FILE_ID
+    const COURSE_DATA = {
+      level: "A1",
+      lessons: [
+        {
+          id: 1,
+          title: "Personal Information & To Be",
+          audio_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+          grammar: `
+            <p><strong>1. Động từ "To Be" ở hiện tại đơn:</strong></p>
+            <ul class="list-disc pl-5 space-y-1">
+              <li><strong>I am</strong> (I'm): Tôi là...</li>
+              <li><strong>He / She / It is</strong> (He's / She's / It's): Anh ấy / Cô ấy / Nó là...</li>
+              <li><strong>You / We / They are</strong> (You're / We're / They're): Bạn / Chúng tôi / Họ là...</li>
+            </ul>
+            <p class="mt-2"><strong>Ví dụ:</strong> I am a student. She is from Vietnam.</p>
+          `,
+          vocabulary: [
+            { word: "Occupation", ipa: "/ˌɑːkjuˈpeɪʃn/", meaning: "Nghề nghiệp", example: "What is your occupation?" },
+            { word: "Nationality", ipa: "/ˌnæʃəˈnæləti/", meaning: "Quốc tịch", example: "My nationality is Vietnamese." },
+            { word: "Colleague", ipa: "/ˈkɑːliːɡ/", meaning: "Đồng nghiệp", example: "He is my new colleague." }
+          ],
+          quiz: [
+            { q: "She ___ an English teacher.", options: ["am", "is", "are"], ans: 1 },
+            { q: "They ___ from Canada.", options: ["is", "am", "are"], ans: 2 }
+          ]
+        },
+        {
+          id: 2,
+          title: "Daily Routines & Simple Present",
+          audio_url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+          grammar: `
+            <p><strong>Thì hiện tại đơn (Present Simple) diễn tả thói quen:</strong></p>
+            <ul class="list-disc pl-5 space-y-1">
+              <li>Khẳng định: <strong>S + V(s/es)</strong> (He wakes up at 6 AM).</li>
+              <li>Phủ định: <strong>S + do/does not + V-bare</strong> (I do not like coffee).</li>
+              <li>Nghi vấn: <strong>Do/Does + S + V-bare?</strong> (Do you speak English?).</li>
+            </ul>
+          `,
+          vocabulary: [
+            { word: "Routine", ipa: "/ruːˈtiːn/", meaning: "Thói quen hàng ngày", example: "Morning routine includes meditation." },
+            { word: "Wake up", ipa: "/weɪk ʌp/", meaning: "Thức dậy", example: "I wake up early." },
+            { word: "Commute", ipa: "/kəˈmjuːt/", meaning: "Đi lại làm việc", example: "He commutes by bus every day." }
+          ],
+          quiz: [
+            { q: "He usually ___ up at 6 o'clock.", options: ["wake", "wakes", "waking"], ans: 1 },
+            { q: "We ___ not work on Sundays.", options: ["do", "does", "are"], ans: 0 }
+          ]
+        }
+      ]
+    };
+
+    let currentLessonIdx = 0;
+    let currentCardIdx = 0;
+    let isFlipped = false;
+
+    // --- 2. INITIALIZATION ---
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      renderSidebar();
+      loadLesson(0);
+      setupExamModal();
+    });
+
+    // --- 3. RENDER LESSONS & SIDEBAR ---
+    function renderSidebar() {
+      const container = document.getElementById('lessons-list');
+      container.innerHTML = '';
+      COURSE_DATA.lessons.forEach((les, idx) => {
+        const activeClass = idx === currentLessonIdx 
+          ? 'bg-indigo-50 border-indigo-500 text-indigo-700 font-semibold' 
+          : 'hover:bg-slate-50 border-transparent text-slate-600';
+        
+        container.innerHTML += `
+          <button onclick="loadLesson(${idx})" class="w-full text-left px-3 py-2.5 rounded-xl border text-sm flex items-center justify-between transition ${activeClass}">
+            <span class="truncate">Bài ${les.id}: ${les.title}</span>
+            <i data-lucide="play-circle" class="w-4 h-4 ml-2 opacity-60"></i>
+          </button>
+        `;
+      });
+      lucide.createIcons();
+    }
+
+    function loadLesson(idx) {
+      currentLessonIdx = idx;
+      currentCardIdx = 0;
+      isFlipped = false;
+      const lesson = COURSE_DATA.lessons[idx];
+
+      // Update Header & Theory
+      document.getElementById('lesson-counter').innerText = `Bài ${idx + 1}/${COURSE_DATA.lessons.length}`;
+      document.getElementById('lesson-badge').innerText = `Unit ${lesson.id}`;
+      document.getElementById('lesson-title').innerText = lesson.title;
+      document.getElementById('lesson-grammar').innerHTML = lesson.grammar;
+
+      // Update Audio Player
+      const player = document.getElementById('audio-player');
+      player.src = lesson.audio_url;
+
+      // Render Flashcard
+      updateFlashcardView();
+
+      // Render Daily Quiz
+      renderDailyQuiz(lesson.quiz);
+
+      renderSidebar();
+      switchTab('learn');
+    }
+
+    // --- 4. TABS & FLASHCARDS ---
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('border-indigo-600', 'text-indigo-600');
+        btn.classList.add('border-transparent', 'text-slate-500');
+      });
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+
+      document.getElementById(`tab-${tab}`).classList.add('border-indigo-600', 'text-indigo-600');
+      document.getElementById(`tab-${tab}`).classList.remove('border-transparent', 'text-slate-500');
+      document.getElementById(`content-${tab}`).classList.remove('hidden');
+    }
+
+    function flipCard() {
+      const card = document.getElementById('flashcard-inner');
+      isFlipped = !isFlipped;
+      if (isFlipped) {
+        card.classList.add('rotate-y-180');
+      } else {
+        card.classList.remove('rotate-y-180');
+      }
+    }
+
+    function updateFlashcardView() {
+      const vocabList = COURSE_DATA.lessons[currentLessonIdx].vocabulary;
+      const card = vocabList[currentCardIdx];
+      const cardInner = document.getElementById('flashcard-inner');
+      cardInner.classList.remove('rotate-y-180');
+      isFlipped = false;
+
+      document.getElementById('card-front-word').innerText = card.word;
+      document.getElementById('card-front-ipa').innerText = card.ipa;
+      document.getElementById('card-back-meaning').innerText = card.meaning;
+      document.getElementById('card-back-example').innerText = `"${card.example}"`;
+      document.getElementById('card-counter').innerText = `${currentCardIdx + 1} / ${vocabList.length}`;
+    }
+
+    function nextCard() {
+      const vocabList = COURSE_DATA.lessons[currentLessonIdx].vocabulary;
+      currentCardIdx = (currentCardIdx + 1) % vocabList.length;
+      updateFlashcardView();
+    }
+
+    function prevCard() {
+      const vocabList = COURSE_DATA.lessons[currentLessonIdx].vocabulary;
+      currentCardIdx = (currentCardIdx - 1 + vocabList.length) % vocabList.length;
+      updateFlashcardView();
+    }
+
+    // --- 5. DAILY QUIZ ---
+    function renderDailyQuiz(quizList) {
+      const box = document.getElementById('quiz-container');
+      box.innerHTML = '';
+      quizList.forEach((item, qIdx) => {
+        let opts = item.options.map((opt, oIdx) => `
+          <label class="flex items-center space-x-2 text-sm p-2 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+            <input type="radio" name="quiz_${qIdx}" value="${oIdx}" class="text-indigo-600 focus:ring-indigo-500">
+            <span>${opt}</span>
+          </label>
+        `).join('');
+
+        box.innerHTML += `
+          <div class="p-3 bg-white border border-slate-200 rounded-xl space-y-2">
+            <p class="text-sm font-semibold text-slate-800">Câu ${qIdx + 1}: ${item.q}</p>
+            <div class="space-y-1">${opts}</div>
+          </div>
+        `;
+      });
+      document.getElementById('quiz-result').classList.add('hidden');
+    }
+
+    function submitDailyQuiz() {
+      const quizList = COURSE_DATA.lessons[currentLessonIdx].quiz;
+      let score = 0;
+      quizList.forEach((item, qIdx) => {
+        const checked = document.querySelector(`input[name="quiz_${qIdx}"]:checked`);
+        if (checked && parseInt(checked.value) === item.ans) {
+          score++;
+        }
+      });
+      const resBox = document.getElementById('quiz-result');
+      resBox.classList.remove('hidden', 'bg-emerald-50', 'text-emerald-700', 'bg-rose-50', 'text-rose-700');
+      
+      if (score === quizList.length) {
+        resBox.classList.add('bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
+        resBox.innerHTML = `<strong>Xuất sắc!</strong> Bạn trả lời đúng ${score}/${quizList.length} câu. Tiếp tục giữ vững phong độ!`;
+      } else {
+        resBox.classList.add('bg-amber-50', 'text-amber-700', 'border-amber-200');
+        resBox.innerHTML = `Bạn đạt <strong>${score}/${quizList.length}</strong> câu đúng. Hãy xem lại lý thuyết và làm lại nhé!`;
+      }
+    }
+
+    // --- 6. APTIS EXIT EXAM & SCORING (Thang điểm 0 - 50 cho 4 kỹ năng) ---
+    function setupExamModal() {
+      document.getElementById('btn-open-exit-exam').onclick = () => {
+        document.getElementById('content-exam').classList.remove('hidden');
+      };
+    }
+
+    function closeExamModal() {
+      document.getElementById('content-exam').classList.add('hidden');
+    }
+
+    function recordSpeechMock() {
+      const btn = document.getElementById('btn-mock-record');
+      const status = document.getElementById('speaking-status');
+      btn.innerText = "Đang ghi âm (Mô phỏng)...";
+      btn.classList.replace('bg-rose-600', 'bg-amber-500');
+      status.innerText = "Hệ thống đang thu âm giọng nói của bạn...";
+
+      setTimeout(() => {
+        btn.innerText = "Đã ghi âm thành công";
+        btn.classList.replace('bg-amber-500', 'bg-emerald-600');
+        status.innerText = "Đã thu âm (30s) - Sẵn sàng chấm điểm!";
+      }, 2000);
+    }
+
+    function evaluateAptisExam() {
+      // 1. Listening Score (0 - 50)
+      const lAns = document.querySelector('input[name="exam_l1"]:checked');
+      let scoreL = (lAns && lAns.value === "0") ? 45 : 15;
+
+      // 2. Reading Score (0 - 50)
+      const rAns = document.querySelector('input[name="exam_r1"]:checked');
+      let scoreR = (rAns && rAns.value === "1") ? 48 : 10;
+
+      // 3. Writing Score (0 - 50)
+      const wText = document.getElementById('exam-writing-input').value.trim();
+      let scoreW = 10;
+      if (wText.length > 30) scoreW = 42;
+      else if (wText.length > 10) scoreW = 28;
+
+      // 4. Speaking Score (0 - 50)
+      let scoreS = 38; // Giả lập chấm điểm
+
+      const totalScore = scoreL + scoreR + scoreW + scoreS;
+      const minPass = 20; // Ngưỡng điểm đạt tối thiểu của kỹ năng A1
+      const isPassed = (scoreL >= minPass && scoreR >= minPass && scoreW >= minPass && scoreS >= minPass);
+
+      const resultBox = document.getElementById('exam-score-box');
+      resultBox.classList.remove('hidden');
+
+      if (isPassed) {
+        resultBox.className = "p-4 rounded-xl border bg-emerald-50 border-emerald-300 text-slate-800 space-y-3";
+        resultBox.innerHTML = `
+          <div class="flex items-center space-x-2 text-emerald-800 font-bold text-base">
+            <i data-lucide="check-circle" class="w-6 h-6 text-emerald-600"></i>
+            <span>CHÚC MỪNG BẠN ĐÃ ĐẠT CHUẨN ĐẦU RA A1!</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+            <div class="bg-white p-2 rounded border font-semibold">Listening: <span class="text-indigo-600 font-bold">${scoreL}/50</span></div>
+            <div class="bg-white p-2 rounded border font-semibold">Reading: <span class="text-emerald-600 font-bold">${scoreR}/50</span></div>
+            <div class="bg-white p-2 rounded border font-semibold">Writing: <span class="text-purple-600 font-bold">${scoreW}/50</span></div>
+            <div class="bg-white p-2 rounded border font-semibold">Speaking: <span class="text-rose-600 font-bold">${scoreS}/50</span></div>
+          </div>
+          <p class="text-xs text-slate-600">Tổng điểm quy đổi Aptis: <strong>${totalScore}/200</strong>. Bạn đã đủ điều kiện mở khóa chặng <strong>A2 (Elementary)</strong>!</p>
+        `;
+        document.getElementById('user-current-level').innerText = "A2 (Đã mở khóa)";
+      } else {
+        resultBox.className = "p-4 rounded-xl border bg-rose-50 border-rose-300 text-slate-800 space-y-3";
+        resultBox.innerHTML = `
+          <div class="flex items-center space-x-2 text-rose-800 font-bold text-base">
+            <i data-lucide="alert-circle" class="w-6 h-6 text-rose-600"></i>
+            <span>BẠN CẦN ÔN TẬP THÊM ĐỂ ĐẠT CHUẨN A1</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+            <div class="bg-white p-2 rounded border font-semibold">Listening: <span class="text-indigo-600 font-bold">${scoreL}/50</span></div>
+            <div class="bg-white p-2 rounded border font-semibold">Reading: <span class="text-emerald-600 font-bold">${scoreR}/50</span></div>
+            <div class="bg-white p-2 rounded border font-semibold">Writing: <span class="text-purple-600 font-bold">${scoreW}/50</span></div>
+            <div class="bg-white p-2 rounded border font-semibold">Speaking: <span class="text-rose-600 font-bold">${scoreS}/50</span></div>
+          </div>
+          <p class="text-xs text-slate-600">Yêu cầu tối thiểu mỗi kỹ năng &ge; ${minPass}/50. Hãy xem lại các bài nghe và từ vựng trong giáo trình để thi lại!</p>
+        `;
+      }
+      lucide.createIcons();
+    }
+  </script>
+</body>
+</html>
